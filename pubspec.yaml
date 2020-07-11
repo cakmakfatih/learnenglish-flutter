@@ -1,0 +1,30 @@
+name: learnenglish
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  country_code_picker: ^1.3.12+1
+  flutter_svg: ^0.17.4
+  image_picker: ^0.6.6+1
+  equatable: ^1.2.0
+  flutter_bloc: ^5.0.0
+  http: ^0.12.1
+  firebase_messaging: ^6.0.15
+  dartz: ^0.9.1
+  data_connection_checker: ^0.3.4
+  shared_preferences: ^0.5.7+3
+  get_it: ^4.0.2
+  google_fonts: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
