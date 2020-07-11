@@ -61,4 +61,15 @@ class QuizRepositoryImpl implements QuizRepository {
       return Left(CacheFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> getTextToSpeechAudio(String text) async {
+    try {
+      final result = await remoteDataSource.getTextToSpeechAudio(text);
+
+      return Right(result);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
+  }
 }

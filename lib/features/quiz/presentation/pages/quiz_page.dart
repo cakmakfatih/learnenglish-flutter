@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learnenglish/features/quiz/presentation/widgets/quiz_main_widget.dart';
 
 import '../../../../injection_container.dart';
 import '../bloc/quiz_bloc.dart';
 import '../widgets/google_search_widget.dart';
+import '../widgets/quiz_main_widget.dart';
 import '../widgets/select_language_widget.dart';
 
 class QuizPage extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:learnenglish/features/quiz/domain/usecases/text_to_speech.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/quiz/data/datasources/quiz_local_data_source.dart';
@@ -23,6 +24,7 @@ void init() async {
       getLanguages: sl(),
       setLanguage: sl(),
       getQuestion: sl(),
+      getTextToSpeechAudio: sl(),
     ),
   );
 
@@ -31,6 +33,7 @@ void init() async {
   sl.registerLazySingleton(() => GetLanguages(sl()));
   sl.registerLazySingleton(() => SetLanguage(sl()));
   sl.registerLazySingleton(() => GetQuestion(sl()));
+  sl.registerLazySingleton(() => GetTextToSpeechAudio(sl()));
 
   // repositories
   sl.registerLazySingleton<QuizRepository>(

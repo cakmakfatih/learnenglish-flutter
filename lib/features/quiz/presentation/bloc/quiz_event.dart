@@ -28,3 +28,5 @@ class SetLanguageFromDropdownEvent extends QuizEvent {
 
   SetLanguageFromDropdownEvent({@required this.language});
 }
+
+class PlayTextEvent extends QuizEvent {}

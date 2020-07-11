@@ -28,14 +28,14 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if ((bloc.state as QuizMain).selectedAnswerIndex != null &&
+        if ((bloc.state as QuizMain).selectedAnswerIndex != -1 &&
             (bloc.state as QuizMain).isLoading == false) {
           bloc.add(GetQuestionEvent());
         }
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 3.5,
-        height: 200,
+        height: 240,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -73,6 +73,29 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: Material(
+            color: Colors.white,
+            child: InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.volume_up,
+                  color: (bloc.state as QuizMain).selectedAnswerIndex < 0
+                      ? Colors.grey.shade200
+                      : Colors.blue,
+                ),
+              ),
+              onTap: (bloc.state as QuizMain).selectedAnswerIndex < 0
+                  ? null
+                  : () {
+                      bloc.add(PlayTextEvent());
+                    },
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
         Container(
           height: 22,
           alignment: Alignment.center,
@@ -86,7 +109,7 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
             ),
           ),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -117,7 +140,7 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
     String word,
   ) {
     final mainState = (bloc.state as QuizMain);
-    bool isDisabled = mainState.selectedAnswerIndex != null;
+    bool isDisabled = mainState.selectedAnswerIndex >= 0;
 
     if (!isDisabled)
       return Expanded(

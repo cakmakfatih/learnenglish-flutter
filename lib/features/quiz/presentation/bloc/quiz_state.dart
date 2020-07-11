@@ -39,13 +39,17 @@ class QuizMain extends QuizState {
   final Question question;
   final bool isLoading;
   final int selectedAnswerIndex;
+  final String audioUrl;
+  final bool isAudioLoading;
 
   QuizMain({
     @required this.language,
     @required this.languages,
     this.question,
     this.isLoading: false,
+    this.isAudioLoading: false,
     this.selectedAnswerIndex,
+    this.audioUrl,
   });
 
   QuizMain copyWith({
@@ -53,18 +57,29 @@ class QuizMain extends QuizState {
     List<Language> languages,
     Question question,
     bool isLoading,
+    bool isAudioLoading,
     int selectedAnswerIndex,
+    String audioUrl,
   }) {
     return QuizMain(
       language: language ?? this.language,
       languages: languages ?? this.languages,
       question: question ?? this.question,
       isLoading: isLoading,
-      selectedAnswerIndex: selectedAnswerIndex,
+      isAudioLoading: isAudioLoading,
+      selectedAnswerIndex: selectedAnswerIndex ?? this.selectedAnswerIndex,
+      audioUrl: audioUrl,
     );
   }
 
   @override
-  List<Object> get props =>
-      [language, languages, question, isLoading, selectedAnswerIndex];
+  List<Object> get props => [
+        language,
+        languages,
+        question,
+        isLoading,
+        isAudioLoading,
+        selectedAnswerIndex,
+        audioUrl,
+      ];
 }

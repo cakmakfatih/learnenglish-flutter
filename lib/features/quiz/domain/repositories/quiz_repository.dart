@@ -9,4 +9,5 @@ abstract class QuizRepository {
   Future<Either<Failure, Question>> getQuestion(Language language);
   Future<Either<Failure, List<Language>>> getLanguages();
   Future<Either<Failure, Language>> getLanguage();
+  Future<Either<Failure, String>> getTextToSpeechAudio(String text);
 }

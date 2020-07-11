@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:learnenglish/features/quiz/domain/entities/question.dart';
+import 'package:learnenglish/features/quiz/domain/usecases/text_to_speech.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/error/failures.dart';
@@ -18,24 +20,30 @@ part 'quiz_event.dart';
 part 'quiz_state.dart';
 
 class QuizBloc extends Bloc<QuizEvent, QuizState> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   final GetLanguage getLanguage;
   final GetLanguages getLanguages;
   final GetQuestion getQuestion;
   final SetLanguage setLanguage;
+  final GetTextToSpeechAudio getTextToSpeechAudio;
 
   QuizBloc({
     @required GetLanguage getLanguage,
     @required GetLanguages getLanguages,
     @required GetQuestion getQuestion,
     @required SetLanguage setLanguage,
+    @required GetTextToSpeechAudio getTextToSpeechAudio,
   })  : assert(getLanguage != null),
         assert(getLanguages != null),
         assert(getQuestion != null),
         assert(setLanguage != null),
+        assert(getTextToSpeechAudio != null),
         getLanguage = getLanguage,
         getLanguages = getLanguages,
         getQuestion = getQuestion,
         setLanguage = setLanguage,
+        getTextToSpeechAudio = getTextToSpeechAudio,
         super(QuizInitial());
 
   @override
@@ -78,8 +86,12 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         );
       });
     } else if (event is GetQuestionEvent) {
-      yield (state as QuizMain)
-          .copyWith(isLoading: true, selectedAnswerIndex: null, question: null);
+      yield (state as QuizMain).copyWith(
+        isLoading: true,
+        selectedAnswerIndex: -1,
+        question: null,
+        audioUrl: null,
+      );
 
       final questionOrFailure = await getQuestion(
         GetQuestionParams(language: (state as QuizMain).language),
@@ -113,12 +125,50 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         );
       }, (_) async* {
         yield (state as QuizMain).copyWith(
+          audioUrl: null,
           language: event.language,
           isLoading: false,
         );
 
         add(GetQuestionEvent());
       });
+    } else if (event is PlayTextEvent) {
+      yield (state as QuizMain).copyWith(
+        isAudioLoading: true,
+        isLoading: false,
+      );
+
+      if ((state as QuizMain).audioUrl != null) {
+        _audioPlayer.play((state as QuizMain).audioUrl);
+
+        yield (state as QuizMain).copyWith(
+          isAudioLoading: false,
+          isLoading: false,
+        );
+      } else {
+        final urlOrFailure = await getTextToSpeechAudio(
+          GetTextToSpeechAudioParams(
+            text: (state as QuizMain)
+                .question
+                .words[(state as QuizMain).question.answer],
+          ),
+        );
+
+        yield* urlOrFailure.fold((failure) async* {
+          yield (state as QuizMain).copyWith(
+            isAudioLoading: false,
+            isLoading: false,
+          );
+        }, (audioUrl) async* {
+          _audioPlayer.play(audioUrl);
+
+          yield (state as QuizMain).copyWith(
+            isAudioLoading: false,
+            isLoading: false,
+            audioUrl: audioUrl,
+          );
+        });
+      }
     }
   }
 }
