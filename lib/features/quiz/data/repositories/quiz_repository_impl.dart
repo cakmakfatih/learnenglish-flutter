@@ -13,8 +13,6 @@ class QuizRepositoryImpl implements QuizRepository {
   final QuizLocalDataSource localDataSource;
   final QuizRemoteDataSource remoteDataSource;
 
-  Language language;
-
   QuizRepositoryImpl({
     @required this.remoteDataSource,
     @required this.localDataSource,
@@ -32,7 +30,7 @@ class QuizRepositoryImpl implements QuizRepository {
   }
 
   @override
-  Future<Either<Failure, Question>> getQuestion() async {
+  Future<Either<Failure, Question>> getQuestion(Language language) async {
     try {
       final result = await remoteDataSource.getQuestion(language);
 

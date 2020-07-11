@@ -6,7 +6,7 @@ import '../entities/question.dart';
 
 abstract class QuizRepository {
   Future<Either<Failure, bool>> setLanguage(Language language);
-  Future<Either<Failure, Question>> getQuestion();  
+  Future<Either<Failure, Question>> getQuestion(Language language);
   Future<Either<Failure, List<Language>>> getLanguages();
   Future<Either<Failure, Language>> getLanguage();
 }

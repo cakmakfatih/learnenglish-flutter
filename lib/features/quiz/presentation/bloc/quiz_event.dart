@@ -8,3 +8,23 @@ abstract class QuizEvent extends Equatable {
 }
 
 class SetStartPageEvent extends QuizEvent {}
+
+class SetLanguageEvent extends QuizEvent {
+  final Language language;
+
+  SetLanguageEvent({@required this.language});
+}
+
+class GetQuestionEvent extends QuizEvent {}
+
+class SelectAnswerEvent extends QuizEvent {
+  final answerIndex;
+
+  SelectAnswerEvent({@required this.answerIndex});
+}
+
+class SetLanguageFromDropdownEvent extends QuizEvent {
+  final Language language;
+
+  SetLanguageFromDropdownEvent({@required this.language});
+}
