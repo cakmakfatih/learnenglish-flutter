@@ -76,7 +76,7 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
               width: 50,
             ),
             Container(
-              height: 22,
+              height: 25,
               alignment: Alignment.center,
               child: Text(
                 question.word,

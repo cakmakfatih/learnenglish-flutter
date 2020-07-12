@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
@@ -12,7 +13,7 @@ abstract class QuizRemoteDataSource {
   Future<String> getTextToSpeechAudio(String text);
 }
 
-const API_URL = "localhost:5000";
+const API_URL = "learn-english-ffhood.herokuapp.com";
 
 class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
   final http.Client client;
@@ -21,7 +22,7 @@ class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
 
   @override
   Future<QuestionModel> getQuestion(Language language) async {
-    final uri = Uri.http(API_URL, '/api/v1/prepare/${language.code}');
+    final uri = Uri.https(API_URL, '/api/v1/prepare/${language.code}');
 
     final response = await client.get(uri);
 
@@ -36,7 +37,7 @@ class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
 
   @override
   Future<String> getTextToSpeechAudio(String text) async {
-    final uri = Uri.http(API_URL, '/api/v1/prepare/speech/$text');
+    final uri = Uri.https(API_URL, '/api/v1/prepare/speech/$text');
 
     final response = await client.get(uri);
 
