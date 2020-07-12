@@ -1,5 +1,10 @@
-import 'package:flutter/material.dart';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
+
+import 'package:flutter/material.dart';
+
+import '../../../../injection_container.dart';
+import '../../../settings/presentation/bloc/settings_bloc.dart';
 
 class GoogleSearchWidget extends StatefulWidget {
   @override
@@ -10,6 +15,8 @@ class _GoogleSearchWidgetState extends State<GoogleSearchWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
 
+  SettingsBloc get settingsBloc => sl<SettingsBloc>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,20 +26,9 @@ class _GoogleSearchWidgetState extends State<GoogleSearchWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              "Google",
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 40,
-                color: Colors.teal.shade700,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
             Material(
               borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.grey.shade100,
+              color: settingsBloc.state.theme.googleInputBackgroundColor,
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -41,7 +37,7 @@ class _GoogleSearchWidgetState extends State<GoogleSearchWidget> {
                       child: TextFormField(
                         controller: _searchController,
                         decoration: InputDecoration(
-                          hintText: "Search",
+                          hintText: "Search with Google",
                           border: InputBorder.none,
                         ),
                         textInputAction: TextInputAction.search,
@@ -57,6 +53,7 @@ class _GoogleSearchWidgetState extends State<GoogleSearchWidget> {
                       padding: const EdgeInsets.all(16.0),
                       child: Icon(
                         Icons.search,
+                        color: settingsBloc.state.theme.iconColor,
                       ),
                     ),
                   ),
@@ -70,6 +67,7 @@ class _GoogleSearchWidgetState extends State<GoogleSearchWidget> {
   }
 
   void _googleSearch() {
-    html.window.location.href = "https://www.google.com/search?q=${_searchController.text}";
+    html.window.location.href =
+        "https://www.google.com/search?q=${_searchController.text}";
   }
 }
