@@ -49,7 +49,7 @@ class QuizMain extends QuizState {
     this.isLoading: false,
     this.isAudioLoading: false,
     this.selectedAnswerIndex,
-    this.audioUrl,
+    this.audioUrl: "-1",
   });
 
   QuizMain copyWith({
@@ -68,7 +68,7 @@ class QuizMain extends QuizState {
       isLoading: isLoading,
       isAudioLoading: isAudioLoading,
       selectedAnswerIndex: selectedAnswerIndex ?? this.selectedAnswerIndex,
-      audioUrl: audioUrl,
+      audioUrl: audioUrl ?? this.audioUrl,
     );
   }
 

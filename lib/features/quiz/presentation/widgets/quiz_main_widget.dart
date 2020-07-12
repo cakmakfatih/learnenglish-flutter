@@ -123,7 +123,7 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
         ),
         SizedBox(height: 15),
         Expanded(child: Container()),
-        if ((bloc.state as QuizMain).selectedAnswerIndex != null)
+        if ((bloc.state as QuizMain).selectedAnswerIndex >= 0)
           Text(
             "click anywhere on the card for the next word",
             textAlign: TextAlign.center,

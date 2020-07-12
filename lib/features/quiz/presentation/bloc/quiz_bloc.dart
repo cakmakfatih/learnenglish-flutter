@@ -90,7 +90,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         isLoading: true,
         selectedAnswerIndex: -1,
         question: null,
-        audioUrl: null,
+        audioUrl: "-1",
       );
 
       final questionOrFailure = await getQuestion(
@@ -125,7 +125,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         );
       }, (_) async* {
         yield (state as QuizMain).copyWith(
-          audioUrl: null,
+          audioUrl: "-1",
           language: event.language,
           isLoading: false,
         );
@@ -138,7 +138,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         isLoading: false,
       );
 
-      if ((state as QuizMain).audioUrl != null) {
+      if ((state as QuizMain).audioUrl != "-1") {
         _audioPlayer.play((state as QuizMain).audioUrl);
 
         yield (state as QuizMain).copyWith(
