@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:learnenglish/core/error/exceptions.dart';
-import 'package:learnenglish/features/quiz/data/models/question_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:learnenglish/features/quiz/domain/entities/language.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../core/error/exceptions.dart';
+import '../../domain/entities/language.dart';
+import '../models/question_model.dart';
 
 abstract class QuizRemoteDataSource {
   Future<QuestionModel> getQuestion(Language language);

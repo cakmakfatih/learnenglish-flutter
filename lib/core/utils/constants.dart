@@ -1,4 +1,4 @@
-import 'package:learnenglish/features/quiz/data/models/language_model.dart';
+import '../../features/quiz/data/models/language_model.dart';
 
 const SERVER_FAILURE_MESSAGE = "Server has failed to fetch.";
 const CACHE_FAILURE_MESSAGE = "Caching has gone wrong.";

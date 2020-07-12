@@ -1,6 +1,10 @@
-import 'package:flutter/material.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
+
+import 'package:flutter/material.dart';
+
+import '../../../../injection_container.dart';
+import '../../../settings/presentation/bloc/settings_bloc.dart';
 
 class GoogleSearchWidget extends StatefulWidget {
   @override
@@ -10,6 +14,8 @@ class GoogleSearchWidget extends StatefulWidget {
 class _GoogleSearchWidgetState extends State<GoogleSearchWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
+
+  SettingsBloc get settingsBloc => sl<SettingsBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +28,7 @@ class _GoogleSearchWidgetState extends State<GoogleSearchWidget> {
           children: <Widget>[
             Material(
               borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.grey.shade100,
+              color: settingsBloc.state.theme.googleInputBackgroundColor,
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -47,6 +53,7 @@ class _GoogleSearchWidgetState extends State<GoogleSearchWidget> {
                       padding: const EdgeInsets.all(16.0),
                       child: Icon(
                         Icons.search,
+                        color: settingsBloc.state.theme.iconColor,
                       ),
                     ),
                   ),

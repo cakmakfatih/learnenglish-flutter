@@ -3,18 +3,18 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:learnenglish/features/quiz/domain/entities/question.dart';
-import 'package:learnenglish/features/quiz/domain/usecases/text_to_speech.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../../core/utils/map_failure_to_message.dart';
 import '../../domain/entities/language.dart';
+import '../../domain/entities/question.dart';
 import '../../domain/usecases/get_language.dart';
 import '../../domain/usecases/get_languages.dart';
 import '../../domain/usecases/get_question.dart';
 import '../../domain/usecases/set_language.dart';
+import '../../domain/usecases/text_to_speech.dart';
 
 part 'quiz_event.dart';
 part 'quiz_state.dart';

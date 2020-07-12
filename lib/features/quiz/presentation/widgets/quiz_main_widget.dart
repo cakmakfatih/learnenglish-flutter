@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learnenglish/features/quiz/domain/entities/question.dart';
 
 import '../../../../injection_container.dart';
+import '../../../settings/presentation/bloc/settings_bloc.dart';
+import '../../domain/entities/question.dart';
 import '../bloc/quiz_bloc.dart';
 
 class QuizMainWidget extends StatefulWidget {
@@ -14,6 +15,7 @@ class QuizMainWidget extends StatefulWidget {
 
 class _QuizMainWidgetState extends State<QuizMainWidget> {
   QuizBloc get bloc => sl<QuizBloc>();
+  SettingsBloc get settingsBloc => sl<SettingsBloc>();
 
   @override
   void initState() {
@@ -34,19 +36,12 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
         }
       },
       child: Container(
-        width: MediaQuery.of(context).size.width / 3.5,
-        height: 240,
+        width: 500,
+        height: 160,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 0,
-              blurRadius: 2,
-              offset: Offset(0, 1), // changes position of shadow
-            ),
-          ],
+          color: settingsBloc.state.theme.cardBackgroundColor,
+          boxShadow: settingsBloc.state.theme.cardShadows,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: BlocBuilder<QuizBloc, QuizState>(
@@ -72,42 +67,53 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
   Column buildQuestion(Question question) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: Material(
-            color: Colors.white,
-            child: InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.volume_up,
-                  color: (bloc.state as QuizMain).selectedAnswerIndex < 0
-                      ? Colors.grey.shade200
-                      : Colors.blue,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 50,
+            ),
+            Container(
+              height: 22,
+              alignment: Alignment.center,
+              child: Text(
+                question.word,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: settingsBloc.state.theme.mainTextColor,
+                  fontSize: 16,
                 ),
               ),
-              onTap: (bloc.state as QuizMain).selectedAnswerIndex < 0
-                  ? null
-                  : () {
-                      bloc.add(PlayTextEvent());
-                    },
             ),
-          ),
-        ),
-        SizedBox(height: 10),
-        Container(
-          height: 22,
-          alignment: Alignment.center,
-          child: Text(
-            question.word,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.w900,
-              color: Color(0xffEF506C),
-              fontSize: 16,
+            Container(
+              width: 50,
+              alignment: Alignment.centerRight,
+              child: Material(
+                color: settingsBloc.state.theme.speechButtonBackgroundColor,
+                child: InkWell(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.volume_up,
+                      color: (bloc.state as QuizMain).selectedAnswerIndex < 0
+                          ? settingsBloc
+                              .state.theme.speechButtonBackgroundDeactiveColor
+                          : settingsBloc
+                              .state.theme.speechButtonBackgroundActiveColor,
+                    ),
+                  ),
+                  onTap: (bloc.state as QuizMain).selectedAnswerIndex < 0
+                      ? null
+                      : () {
+                          bloc.add(PlayTextEvent());
+                        },
+                ),
+              ),
             ),
-          ),
+          ],
         ),
         SizedBox(height: 10),
         Row(
@@ -117,20 +123,10 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
                 wordIndex < question.words.length;
                 wordIndex++) ...[
               buildOption(wordIndex, question.words[wordIndex]),
-              if (wordIndex != question.words.length - 1) SizedBox(width: 5),
+              if (wordIndex != question.words.length - 1) SizedBox(width: 10),
             ],
           ],
         ),
-        SizedBox(height: 15),
-        Expanded(child: Container()),
-        if ((bloc.state as QuizMain).selectedAnswerIndex >= 0)
-          Text(
-            "click anywhere on the card for the next word",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0x99000000),
-            ),
-          ),
       ],
     );
   }
@@ -155,7 +151,7 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
               borderRadius: BorderRadius.circular(30),
               side: BorderSide(
                 width: 1,
-                color: Colors.grey.shade200,
+                color: settingsBloc.state.theme.optionBorderColor,
               ),
             ),
             onPressed: () {
@@ -165,6 +161,7 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
               word,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
+                color: settingsBloc.state.theme.mainTextColor,
               ),
             ),
           ),
@@ -185,16 +182,16 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
                 color: Colors.transparent,
               ),
               color: answerIndex == mainState.question.answer
-                  ? Colors.green
-                  : Colors.red,
+                  ? settingsBloc.state.theme.correctAnswerButtonBackgroundColor
+                  : settingsBloc.state.theme.wrongAnswerButtonBackgroundColor,
             ),
             child: Center(
               child: Text(
                 word,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.button.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: settingsBloc.state.theme.oppositeTextColor,
+                    ),
               ),
             ),
           ),
@@ -211,16 +208,17 @@ class _QuizMainWidgetState extends State<QuizMainWidget> {
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
               width: 1,
-              color: Colors.grey.shade200,
+              color: settingsBloc.state.theme.optionBorderColor,
             ),
             color: Colors.transparent,
           ),
           child: Center(
             child: Text(
               word,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(context).textTheme.button.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: settingsBloc.state.theme.mainTextColor,
+                  ),
             ),
           ),
         ),

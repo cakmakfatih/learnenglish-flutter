@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:learnenglish/features/quiz/presentation/bloc/quiz_bloc.dart';
 
 import '../../../../injection_container.dart';
+import '../../../settings/presentation/bloc/settings_bloc.dart';
 import '../../domain/entities/language.dart';
+import '../bloc/quiz_bloc.dart';
 
 class SelectLanguageWidget extends StatefulWidget {
   const SelectLanguageWidget({
@@ -21,6 +22,7 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
   final TextEditingController _filterTextController = TextEditingController();
 
   QuizBloc get bloc => sl<QuizBloc>();
+  SettingsBloc get settingsBloc => sl<SettingsBloc>();
 
   String _filterText = "";
   List<Language> get _filteredLanguages =>
@@ -77,15 +79,8 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
       height: MediaQuery.of(context).size.height / 3,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 0,
-            blurRadius: 2,
-            offset: Offset(0, 1), // changes position of shadow
-          ),
-        ],
+        color: settingsBloc.state.theme.cardBackgroundColor,
+        boxShadow: settingsBloc.state.theme.cardShadows,
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: Column(
@@ -97,14 +92,14 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
-              color: Color(0x99000000),
+              color: settingsBloc.state.theme.mainTextColor,
             ),
           ),
           SizedBox(
             height: 10,
           ),
           Material(
-            color: Colors.grey.shade100,
+            color: settingsBloc.state.theme.googleInputBackgroundColor,
             borderRadius: BorderRadius.all(Radius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -120,7 +115,7 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
           SizedBox(height: 10),
           Expanded(
             child: Material(
-              color: Colors.white,
+              color: settingsBloc.state.theme.cardBackgroundColor,
               borderRadius: BorderRadius.all(Radius.circular(10)),
               child: Scrollbar(
                 isAlwaysShown: true,
@@ -134,7 +129,7 @@ class _SelectLanguageWidgetState extends State<SelectLanguageWidget> {
                   separatorBuilder: (context, index) {
                     return Container(
                       height: 1,
-                      color: Colors.grey.shade200,
+                      color: settingsBloc.state.theme.seperatorColor,
                       margin: EdgeInsets.only(right: 10),
                     );
                   },
